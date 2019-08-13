@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+
+namespace Cspray\Yape;
+
+$cwd = getcwd();
+
+require_once $cwd . '/vendor/autoload.php';
+
+echo 'Where would you like to create your new enum? (src): ';
+$dir = trim(fgets(STDIN));
+$dir = $cwd . DIRECTORY_SEPARATOR . rtrim($dir, DIRECTORY_SEPARATOR);
+
+if (!is_dir($dir) || !is_writable($dir)) {
+    echo 'The directory to create the enum must be writeable';
+    exit(255);
+}
+
+$factory = new EnumDefinitionFactory();
+$definition = $factory->fromCliArgs($argv);
+
+$code = (new EnumCodeGenerator())->generateEnumCode($definition);
+file_put_contents($dir . DIRECTORY_SEPARATOR . $definition->getEnumName() . '.php', $code);

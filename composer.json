@@ -1,0 +1,22 @@
+
+{
+  "name": "cspray/yape",
+  "description": "Yet Another PHP Enum. Offering a code generator for type-safe enums.",
+  "bin": ["bin/yape"],
+  "require": {
+    "php": "^7.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cspray\\Yape\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Cspray\\Yape\\Test\\": "test"
+    }
+  }
+}
