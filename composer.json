@@ -2,6 +2,16 @@
 {
   "name": "cspray/yape",
   "description": "Yet Another PHP Enum. Offering a code generator for type-safe enums.",
+  "keywords": ["enum", "code generator"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Charles Sprayberry",
+      "email": "yape@cspray.io",
+      "homepage": "http://cspray.io",
+      "role": "Developer"
+    }
+  ],
   "bin": ["bin/yape"],
   "require": {
     "php": "^7.2"

@@ -10,12 +10,8 @@ does it require defining class level constants.
 ## Installation
 
 ```shell
-composer require-dev cspray/yape
+composer require cspray/yape
 ```
-
-Note that YAPE is not intended to be ran in your production environment. The enums that you need for your 
-application should be created in your development environment ahead of time and not be dynamically made 
-available.
 
 ### Usage
 
