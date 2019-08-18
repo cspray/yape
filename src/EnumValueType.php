@@ -15,10 +15,12 @@ final class EnumValueType implements Enum {
 
     private $enumConstName;
     private $value;
+    private $typeValidator;
 
-    private function __construct(string $enumConstName, string $value) {
+    private function __construct(string $enumConstName, string $value, callable $typeValidator) {
         $this->enumConstName = $enumConstName;
         $this->value = $value;
+        $this->typeValidator = $typeValidator;
     }
 
     protected static function getSingleton($value, ...$additionalConstructorArgs) {
@@ -30,23 +32,35 @@ final class EnumValueType implements Enum {
     }
 
     public static function String() : EnumValueType {
-        return self::getSingleton('String', 'string');
+        return self::getSingleton('String', 'string', function($var) {
+            return is_string($var);
+        });
     }
 
     public static function Int() : EnumValueType {
-        return self::getSingleton('Int', 'int');
+        return self::getSingleton('Int', 'int', function($var) {
+            return is_int($var);
+        });
     }
 
     public static function Bool() : EnumValueType {
-        return self::getSingleton('Bool', 'bool');
+        return self::getSingleton('Bool', 'bool', function($var) {
+            return is_bool($var);
+        });
     }
 
     public static function Float() : EnumValueType {
-        return self::getSingleton('Float', 'float');
+        return self::getSingleton('Float', 'float', function($var) {
+            return is_float($var);
+        });
     }
 
     public function getValue() : string {
         return $this->value;
+    }
+
+    public function isValidType($var) : bool {
+        return ($this->typeValidator)($var);
     }
 
     public function equals(EnumValueType $enumValueType) : bool {

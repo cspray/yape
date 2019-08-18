@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 2019-08-18
+
+#### Fixed
+
+- Adds a missing isValidType method that was inadvertently overwritten when a new enum was generated.
+
 ## 1.0.0 2019-08-18
 
 #### Added
