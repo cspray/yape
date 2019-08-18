@@ -9,15 +9,39 @@ require_once $cwd . '/vendor/autoload.php';
 
 echo 'Where would you like to create your new enum? (src): ';
 $dir = trim(fgets(STDIN));
+if (empty($dir)) {
+    $dir = 'src';
+}
 $dir = $cwd . DIRECTORY_SEPARATOR . rtrim($dir, DIRECTORY_SEPARATOR);
 
 if (!is_dir($dir) || !is_writable($dir)) {
-    echo 'The directory to create the enum must be writeable';
+    echo 'The directory to create the enum must be writeable', PHP_EOL;
     exit(255);
 }
 
-$factory = new EnumDefinitionFactory();
-$definition = $factory->fromCliArgs($argv);
 
-$code = (new EnumCodeGenerator())->generateEnumCode($definition);
-file_put_contents($dir . DIRECTORY_SEPARATOR . $definition->getEnumName() . '.php', $code);
+try {
+    $factory = new EnumDefinitionFactory();
+    $definition = $factory->fromCliArgs($argv);
+    $code = (new EnumCodeGenerator(new EnumDefinitionValidator()))->generateEnumCode($definition);
+} catch (\InvalidArgumentException $argumentException) {
+    echo "There was an error creating your enum. The exact problems are:", PHP_EOL;
+    echo "\t- ", $argumentException->getMessage(), PHP_EOL;
+    exit(255);
+} catch (EnumValidationException $enumValidationException) {
+    echo "There was an error creating your enum. The exact problems are:", PHP_EOL;
+    foreach ($enumValidationException->getValidationResults()->getErrorMessages() as $errorMessage) {
+        echo "\t- ", $errorMessage, PHP_EOL;
+    }
+    exit(255);
+}
+
+$enumFile = $dir . DIRECTORY_SEPARATOR . $definition->getEnumName() . '.php';
+$written = file_put_contents($enumFile, $code);
+if ($written === false) {
+    echo sprintf('There was an unexpected error writing the enum code to the specified file, "%s"', $enumFile), PHP_EOL;
+    exit(255);
+} else {
+    echo 'Your enum was successfully created!', PHP_EOL;
+    exit(0);
+}
