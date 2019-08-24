@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.1.1 2019-08-18
+## 1.1.0 2019-08-23
+
+#### Added
+
+- A confirmation prompt has been added in cases where an enum is attempted to be written to a file 
+that already exists.
+
+## 1.0.1 2019-08-18
 
 #### Fixed
 
