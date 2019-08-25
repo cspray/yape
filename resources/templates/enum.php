@@ -19,12 +19,13 @@ final class <?= $this->getEnumName() ?> implements Enum {
         $this->value = $value;
     }
 
-    protected static function getSingleton($value, ...$additionalConstructorArgs) {
-        if (!isset(self::$container[$value])) {
-            self::$container[$value] = new self(...array_merge([$value], $additionalConstructorArgs));
+    private static function getSingleton(...$constructorArgs) {
+        $name = $constructorArgs[0];
+        if (!isset(self::$container[$name])) {
+            self::$container[$name] = new self(...$constructorArgs);
         }
 
-        return self::$container[$value];
+        return self::$container[$name];
     }
 
 <?php foreach($this->getEnumValues() as $enumValue): ?>
