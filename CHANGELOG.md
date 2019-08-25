@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 2019-08-25
+
+#### Changed
+
+- Updated the `getSingleton` method to have a simpler method signature and avoid need to 
+merge arrays together.
+
 ## 1.1.0 2019-08-23
 
 #### Added
