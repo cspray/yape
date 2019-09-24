@@ -4,8 +4,6 @@ namespace Cspray\Yape\Test;
 
 use Cspray\Yape\EnumDefinition;
 use Cspray\Yape\EnumDefinitionValidator;
-use Cspray\Yape\EnumValue;
-use Cspray\Yape\EnumValueType;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +24,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidateWithBadNamespace() {
-        $definition = new EnumDefinition('This is a bad namespace', 'EnumName', EnumValueType::String(), new EnumValue('One', 'One'));
+        $definition = new EnumDefinition('This is a bad namespace', 'EnumName', 'One');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -38,7 +36,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidateWithBadClassName() {
-        $definition = new EnumDefinition('Vendor\\GoodApp', 'Bad Class Name', EnumValueType::String(), new EnumValue('One', 'One'));
+        $definition = new EnumDefinition('Vendor\\GoodApp', 'Bad Class Name', 'One');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -50,7 +48,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithEmptyEnumValue() {
-        $definition = new EnumDefinition('Vendor\\GoodApp', 'GoodClassName', EnumValueType::String());
+        $definition = new EnumDefinition('Vendor\\GoodApp', 'GoodClassName');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -62,19 +60,19 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithBadEnumValueName() {
-        $definition = new EnumDefinition('Vendorr\\GoodApp', 'Some_Class_Name1', EnumValueType::String(), new EnumValue('Bad Method Name', 'one'));
+        $definition = new EnumDefinition('Vendorr\\GoodApp', 'Some_Class_Name1', 'Bad Method Name');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
 
-        $expected = ['All EnumValue names must have only valid PHP class method characters'];
+        $expected = ['All enum values must have only valid PHP class method characters'];
         $actual = $results->getErrorMessages();
 
         $this->assertSame($expected, $actual);
     }
 
     public function testValidatorWithReservedWordInNamespace() {
-        $definition = new EnumDefinition('Parent\\Class', 'SomeClass', EnumValueType::Int(), new EnumValue('OhNo', 1));
+        $definition = new EnumDefinition('Parent\\Class', 'SomeClass', 'OhNo');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -86,12 +84,24 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithReservedWordInClass() {
-        $definition = new EnumDefinition('ParentNamespace\\SubNamespace', 'Class', EnumValueType::Int(), new EnumValue('OhNo', 1));
+        $definition = new EnumDefinition('ParentNamespace\\SubNamespace', 'Class', 'OhNo');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
 
         $expected = ['The enum class must not be a PHP reserved word'];
+        $actual = $results->getErrorMessages();
+
+        $this->assertSame($expected, $actual);
+    }
+
+    public function testValidatorWithDuplicateMethodNames() {
+        $definition = new EnumDefinition('Foo\\Bar\\Baz', 'Enum', 'One', 'One', 'Two');
+        $results = $this->subject->validate($definition);
+
+        $this->assertFalse($results->isValid());
+
+        $expected = ['The enum values may not contain duplicates'];
         $actual = $results->getErrorMessages();
 
         $this->assertSame($expected, $actual);

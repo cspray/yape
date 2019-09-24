@@ -12,14 +12,12 @@ class EnumDefinition {
 
     private $namespace;
     private $enumName;
-    private $enumValueType;
     private $enumValues;
 
-    public function __construct(string $namespace, string $enumName, EnumValueType $enumValueType, EnumValue ...$enumValues) {
+    public function __construct(string $namespace, string $enumName, string ...$enumValues) {
         $this->namespace = $namespace;
         $this->enumName = $enumName;
-        $this->enumValueType = $enumValueType;
-        $this->enumValues = new EnumValueSet($enumValueType, ...$enumValues);
+        $this->enumValues = $enumValues;
     }
 
     /**
@@ -45,24 +43,9 @@ class EnumDefinition {
     }
 
     /**
-     * The type that each EnumValue is expected to adhere to.
-     *
-     * @return EnumValueType
+     * @return string[]
      */
-    public function getValueType() : EnumValueType {
-        return $this->enumValueType;
-    }
-
-    /**
-     * A set of unique EnumValues; each EnumValue represents a name (or static method call) as well as an underlying
-     * scalar or Enum value that is associated with the enum.
-     *
-     * EnumValue uniqueness extends to both the name of the EnumValue as well as the value itself. An enum MUST NOT have
-     * duplicate EnumValue or the generated PHP code will not work as expected.
-     *
-     * @return EnumValueSet
-     */
-    public function getEnumValues() : EnumValueSet {
+    public function getEnumValues() : array {
         return $this->enumValues;
     }
 

@@ -13,4 +13,12 @@ namespace Cspray\Yape;
  * @license See LICENSE in source root
  */
 interface Enum {
+
+    static public function values() : array;
+
+    static public function valueOf(string $enumName);
+
+    public function equals($compare) : bool;
+
+    public function toString() : string;
 }

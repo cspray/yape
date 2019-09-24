@@ -1,13 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape;
+namespace Cspray\Yape\Exception;
+
+use Cspray\Yape\EnumDefinition;
+use Cspray\Yape\ValidationResults;
 
 /**
  *
  * @package Cspray\Yape
  * @license See LICENSE in source root
  */
-class EnumValidationException extends \RuntimeException {
+class EnumValidationException extends Exception {
 
     private $enumDefinition;
     private $validationResults;

@@ -142,9 +142,16 @@ final class EnumDefinitionValidator {
             $errorMessages[] = 'There must be at least one enum value';
         }
 
+        // array_flip will put each enumValue as the key; if the same key exists in an array it is overwritten and thus
+        // if our flipped array does not equal the same amount of values in our non-flipped array it is implied that
+        // there is a duplicate value.
+        if (count($enumDefinition->getEnumValues()) !== count(array_flip($enumDefinition->getEnumValues()))) {
+            $errorMessages[] = 'The enum values may not contain duplicates';
+        }
+
         foreach ($enumDefinition->getEnumValues() as $enumValue) {
-            if (!preg_match($phpLabelRegex, $enumValue->getName())) {
-                $errorMessages[] = 'All EnumValue names must have only valid PHP class method characters';
+            if (!preg_match($phpLabelRegex, $enumValue)) {
+                $errorMessages[] = 'All enum values must have only valid PHP class method characters';
             }
         }
 
