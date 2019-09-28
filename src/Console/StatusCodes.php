@@ -16,6 +16,12 @@ class StatusCodes {
     const ENUM_EXISTS_ERROR = 254;
 
     // Errors related to invalid input commands or filesystem errors
-    const INPUT_OPTIONS_CONFLICT_ERROR = 155;
+    const INPUT_OPTIONS_CONFLICT_ERROR = 199;
+    const SYSTEM_OUTPUT_DIRECTORY_ERROR = 198;
+
+    // Note that this constant is not used within the codebase because the error it specifies happens before the
+    // StatusCodes class can be autoloaded. This is here as a placeholder to ensure this value does not get used to
+    // represent another error.
+    const SYSTEM_VENDOR_AUTOLOAD_ERROR = 197;
 
 }

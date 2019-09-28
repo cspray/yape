@@ -82,6 +82,14 @@ CONSOLE;
     }
 
     private function handleRealRun(SymfonyStyle $cli, EnumDefinition $enumDefinition, InputInterface $input) : int {
+        $outputDir = $this->getOutputDir($enumDefinition, $input);
+        if (!is_dir($outputDir)) {
+            $cli->writeln('There was an error creating your enum:');
+            $cli->newLine();
+            $cli->error(sprintf('The output directory specified, "%s", does not exist.', $outputDir));
+            return StatusCodes::SYSTEM_OUTPUT_DIRECTORY_ERROR;
+        }
+
         $filePath = $this->getOutputPath($enumDefinition, $input);
         if (file_exists($filePath)) {
             $cli->writeln('There was an error creating your enum:');
@@ -103,12 +111,19 @@ CONSOLE;
         return StatusCodes::ENUM_INVALID_ERROR;
     }
 
-    private function getOutputPath(EnumDefinition $enumDefinition, InputInterface $input) : string {
+    private function getOutputDir(EnumDefinition $enumDefinition, InputInterface $input) : string {
         $outputDir = $input->getOption('output-dir') ?? $this->config->getDefaultOutputDir();
         return sprintf(
-            '%s/%s/%s.php',
+            '%s/%s',
             $this->config->getRootDir(),
-            $outputDir,
+            $outputDir
+        );
+    }
+
+    private function getOutputPath(EnumDefinition $enumDefinition, InputInterface $input) : string {
+        return sprintf(
+            '%s/%s.php',
+            $this->getOutputDir($enumDefinition, $input),
             $enumDefinition->getEnumName()
         );
     }

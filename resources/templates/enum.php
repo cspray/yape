@@ -16,7 +16,6 @@ final class <?= $this->getEnumName() ?> implements Enum {
     private static $container = [];
 
     private $enumConstName;
-    private $value;
 
     private function __construct(string $enumConstName) {
         $this->enumConstName = $enumConstName;

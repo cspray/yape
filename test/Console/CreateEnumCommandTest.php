@@ -90,7 +90,7 @@ class CreateEnumCommandTest extends TestCase {
         $option = $enumCommand->getDefinition()->getOption('output-dir');
 
         $this->assertTrue($option->isValueRequired());
-        $this->assertSame('Specify a directory, under the current working directory, in which the enum will be stored.', $option->getDescription());
+        $this->assertSame('Specify a directory, under the current working directory, in which the enum will be stored. By default this is "src/Enums".', $option->getDescription());
         $this->assertSame('o', $option->getShortcut());
     }
 
@@ -126,6 +126,53 @@ CONSOLE;
 [ERROR] You must not use the output-dir and dry-run options together.
 CONSOLE;
         $this->assertSame(StatusCodes::INPUT_OPTIONS_CONFLICT_ERROR, $tester->getStatusCode());
+        $this->assertSame($expected, trim($tester->getDisplay()));
+    }
+
+    public function testNoDryRunFileExistsShowError() {
+        $this->codeGenerator->expects($this->never())->method('generate');
+
+        vfsStream::newFile('enums/' . $this->outputDir . '/Compass.php')->at($this->vfs)->setContent('existed');
+        $path = vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php');
+
+        $tester = new CommandTester($this->getCreateEnumCommand());
+        $tester->execute([
+            'enumClass' => 'Foo\\Bar\\Baz\\Compass',
+            'enumValues' => ['North', 'South', 'East', 'West']
+        ]);
+
+
+        $expected = <<<CONSOLE
+There was an error creating your enum:
+
+ [ERROR] - The enum specified, "Foo\Bar\Baz\Compass", already exists at                                                 
+         {$path}
+CONSOLE;
+
+        $this->assertSame(StatusCodes::ENUM_EXISTS_ERROR, $tester->getStatusCode());
+        $this->assertSame($expected, trim($tester->getDisplay()));
+        $this->assertSame('existed', file_get_contents($path));
+    }
+
+    public function testNoDryRunOutputDirDoesNotExistShowsError() {
+        $this->codeGenerator->expects($this->never())->method('generate');
+
+        rmdir(vfsStream::url('code-generator/enums/' . $this->outputDir));
+
+        $outputDir = vfsStream::url('code-generator/enums/' . $this->outputDir);
+        $tester = new CommandTester($this->getCreateEnumCommand());
+        $tester->execute([
+            'enumClass' => 'Foo\\Bar\\Compass',
+            'enumValues' => ['North', 'South', 'East', 'West']
+        ]);
+
+        $expected = <<<CONSOLE
+There was an error creating your enum:
+
+ [ERROR] The output directory specified, "$outputDir", does not exist.
+CONSOLE;
+
+        $this->assertSame(StatusCodes::SYSTEM_OUTPUT_DIRECTORY_ERROR, $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 
@@ -182,31 +229,6 @@ CONSOLE;
         $this->assertSame($expected, $enumFile->getContent());
         $this->assertSame(StatusCodes::OK, $tester->getStatusCode());
         $this->assertSame('Your enum was stored at ' . vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php'), trim($tester->getDisplay()));
-    }
-
-    public function testNoDryRunFileExistsShowError() {
-        $this->codeGenerator->expects($this->never())->method('generate');
-
-        vfsStream::newFile('enums/' . $this->outputDir . '/Compass.php')->at($this->vfs)->setContent('existed');
-        $path = vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php');
-
-        $tester = new CommandTester($this->getCreateEnumCommand());
-        $tester->execute([
-            'enumClass' => 'Foo\\Bar\\Baz\\Compass',
-            'enumValues' => ['North', 'South', 'East', 'West']
-        ]);
-
-
-        $expected = <<<CONSOLE
-There was an error creating your enum:
-
- [ERROR] - The enum specified, "Foo\Bar\Baz\Compass", already exists at                                                 
-         {$path}
-CONSOLE;
-
-        $this->assertSame(StatusCodes::ENUM_EXISTS_ERROR, $tester->getStatusCode());
-        $this->assertSame($expected, trim($tester->getDisplay()));
-        $this->assertSame('existed', file_get_contents($path));
     }
 
     public function testOutputDirOptionRespected() {

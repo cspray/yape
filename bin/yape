@@ -1,7 +1,13 @@
 #!/usr/bin/env php
 <?php
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+$cwd = getcwd();
+if (!file_exists($cwd . '/vendor/autoload.php')) {
+    echo 'Expected to find a Composer autoload.php file in the ./vendor directory but nothing was found.';
+    // Note that this corresponds to StatusCodes::SYSTEM_VENDOR_AUTOLOAD_ERROR
+    exit(197);
+}
+require_once $cwd . '/vendor/autoload.php';
 
 use Cspray\Yape\Console\Configuration\CreateEnumCommandConfig;
 use Cspray\Yape\Console\CreateEnumCommand;
@@ -12,7 +18,7 @@ use Symfony\Component\Console\Application;
 $app = new Application();
 
 $app->setName('yape Enum Generator');
-$app->setVersion('2.0.0-rc1');
+$app->setVersion('2.0.0-rc2');
 
 $templateEnumCodeGenerator = new TemplateEnumCodeGenerator();
 $config = new CreateEnumCommandConfig(getcwd(), 'src/Enums');
