@@ -129,6 +129,51 @@ CONSOLE;
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 
+    public function testNoDryRunFileExistsShowError() {
+        $this->codeGenerator->expects($this->never())->method('generate');
+
+        vfsStream::newFile('enums/' . $this->outputDir . '/Compass.php')->at($this->vfs)->setContent('existed');
+        $path = vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php');
+
+        $tester = new CommandTester($this->getCreateEnumCommand());
+        $tester->execute([
+            'enumClass' => 'Foo\\Bar\\Baz\\Compass',
+            'enumValues' => ['North', 'South', 'East', 'West']
+        ]);
+
+
+        $expected = <<<CONSOLE
+There was an error creating your enum:
+
+ [ERROR] - The enum specified, "Foo\Bar\Baz\Compass", already exists at                                                 
+         {$path}
+CONSOLE;
+
+        $this->assertSame(StatusCodes::ENUM_EXISTS_ERROR, $tester->getStatusCode());
+        $this->assertSame($expected, trim($tester->getDisplay()));
+        $this->assertSame('existed', file_get_contents($path));
+    }
+
+    public function testNoDryRunOutputDirDoesNotExistShowsError() {
+        $this->codeGenerator->expects($this->never())->method('generate');
+
+        rmdir(vfsStream::url('code-generator/enums/' . $this->outputDir));
+
+        $outputDir = vfsStream::url('code-generator/enums/' . $this->outputDir);
+        $tester = new CommandTester($this->getCreateEnumCommand());
+        $tester->execute([
+            'enumClass' => 'Foo\\Bar\\Compass',
+            'enumValues' => ['North', 'South', 'East', 'West']
+        ]);
+
+        $expected = <<<CONSOLE
+There was an error creating your enum:
+
+ [ERROR] The output directory specified, "$outputDir", does not exist.
+CONSOLE;
+        $this->assertSame($expected, trim($tester->getDisplay()));
+    }
+
     public function testDryRunOptionSendsGeneratedEnumToStdout() {
         $this->codeGenerator->expects($this->once())
             ->method('generate')
@@ -182,31 +227,6 @@ CONSOLE;
         $this->assertSame($expected, $enumFile->getContent());
         $this->assertSame(StatusCodes::OK, $tester->getStatusCode());
         $this->assertSame('Your enum was stored at ' . vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php'), trim($tester->getDisplay()));
-    }
-
-    public function testNoDryRunFileExistsShowError() {
-        $this->codeGenerator->expects($this->never())->method('generate');
-
-        vfsStream::newFile('enums/' . $this->outputDir . '/Compass.php')->at($this->vfs)->setContent('existed');
-        $path = vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php');
-
-        $tester = new CommandTester($this->getCreateEnumCommand());
-        $tester->execute([
-            'enumClass' => 'Foo\\Bar\\Baz\\Compass',
-            'enumValues' => ['North', 'South', 'East', 'West']
-        ]);
-
-
-        $expected = <<<CONSOLE
-There was an error creating your enum:
-
- [ERROR] - The enum specified, "Foo\Bar\Baz\Compass", already exists at                                                 
-         {$path}
-CONSOLE;
-
-        $this->assertSame(StatusCodes::ENUM_EXISTS_ERROR, $tester->getStatusCode());
-        $this->assertSame($expected, trim($tester->getDisplay()));
-        $this->assertSame('existed', file_get_contents($path));
     }
 
     public function testOutputDirOptionRespected() {

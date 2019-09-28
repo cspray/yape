@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog] and this project adheres to [Semantic Versioning]
 
+## 2.0.0-rc2 - 2019-09-28
+
+#### Fixed
+
+- Fixes an error in the `bin/yape` command where we were not handling autoload correctly when using from a 
+Composer installation.
+- Fixes a PHP error from being triggered if the output directory specified does not exist.
+
+#### Removed
+
+- Removed the unused `$value` property from generated enums.
+
 ## 2.0.0-rc1 - 2019-09-28
 
 #### Added
