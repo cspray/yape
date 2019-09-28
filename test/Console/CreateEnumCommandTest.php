@@ -90,7 +90,7 @@ class CreateEnumCommandTest extends TestCase {
         $option = $enumCommand->getDefinition()->getOption('output-dir');
 
         $this->assertTrue($option->isValueRequired());
-        $this->assertSame('Specify a directory, under the current working directory, in which the enum will be stored.', $option->getDescription());
+        $this->assertSame('Specify a directory, under the current working directory, in which the enum will be stored. By default this is "src/Enums".', $option->getDescription());
         $this->assertSame('o', $option->getShortcut());
     }
 

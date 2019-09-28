@@ -22,7 +22,7 @@ class CreateEnumCommandDefinition extends InputDefinition {
 
         $this->addOptions([
             new InputOption('dry-run', 'd', null, 'Use this flag to output the generated enum to stdout instead of writing to disk'),
-            new InputOption('output-dir', 'o', InputOption::VALUE_REQUIRED, 'Specify a directory, under the current working directory, in which the enum will be stored.')
+            new InputOption('output-dir', 'o', InputOption::VALUE_REQUIRED, 'Specify a directory, under the current working directory, in which the enum will be stored. By default this is "src/Enums".')
         ]);
     }
 
