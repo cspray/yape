@@ -171,6 +171,8 @@ There was an error creating your enum:
 
  [ERROR] The output directory specified, "$outputDir", does not exist.
 CONSOLE;
+
+        $this->assertSame(StatusCodes::SYSTEM_OUTPUT_DIRECTORY_ERROR, $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 

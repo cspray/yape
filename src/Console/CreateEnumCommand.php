@@ -87,7 +87,7 @@ CONSOLE;
             $cli->writeln('There was an error creating your enum:');
             $cli->newLine();
             $cli->error(sprintf('The output directory specified, "%s", does not exist.', $outputDir));
-            return 0;
+            return StatusCodes::SYSTEM_OUTPUT_DIRECTORY_ERROR;
         }
 
         $filePath = $this->getOutputPath($enumDefinition, $input);
