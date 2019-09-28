@@ -1,5 +1,29 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog] and this project adheres to [Semantic Versioning]
+
+## 2.0.0-rc1 - 2019-09-28
+
+#### Added
+
+- Adds a Symfony Console command for creating an enum.
+- Adds a `values` static method that allows retrieving all of the values available on the enum.
+- Adds a `valueOf` static method that allows retrieving an enum object from its `getName` return value.
+
+#### Changed
+
+- Removes type parameter on `equals`. The type parameter on this method was overly burdensome when attempting 
+to compare a value to the enum in which you many not know if it is a valid object type. There is nothing 
+especially gained by being this restrictive and equals comparisons can happen against all types.
+
+#### Removed
+
+- Removes the default `getValue` implementation. The way that a value was tied to the enum was not especially 
+intuitive, led to too-verbose code, and was not particularly useful in practice. If a scalar value is needed 
+for the enum it should be provided post code-generation and be given a semantic method name.
+
 ## 1.2.0 2019-08-25
 
 #### Changed
@@ -34,3 +58,6 @@ command.
 - Adds an `EnumDefinitionValidator` that will make basic checks against an EnumDefinition to make assurances
 that valid PHP code will be created.
 - An `EnumValueSet` that ensures a distinct set of EnumValue are stored.
+
+[Keep a Changelog]: https://keepachangelog.com/en/1.0.0/
+[Semantic Versioning]: https://semver.org/spec/v2.0.0.html
