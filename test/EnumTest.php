@@ -120,7 +120,7 @@ abstract class EnumTest extends TestCase {
         $data = [];
         $enumDefinition = $this->getEnumDefinition();
         foreach ($enumDefinition->getEnumValues() as $enumValue) {
-            $data[] = [$enumValue, $enumDefinition->getNamespace() . '\\' . $enumDefinition->getEnumName() . '@' . $enumValue];
+            $data[] = [$enumValue, $enumValue];
         }
 
         return $data;
