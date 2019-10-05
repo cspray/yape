@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog] and this project adheres to [Semantic Versioning]
 
+## 2.0.0-rc3 - 2019-10-05
+
+#### Changed
+
+- Changed the return value of the `toString` method from an arbitrary string with the enum class name and 
+the enum value to simply returning the enum value. In the example `YourNamespace\\Enums\\Compass@North` would 
+now simply return 'North'.
+- Instead of having each enum generate its own set of boilerplate much of the generically shared code has 
+been moved to a trait to facilitate building your own enums without the code generator and making enums 
+generally less "noisy".
+
 ## 2.0.0-rc2 - 2019-09-28
 
 #### Fixed
