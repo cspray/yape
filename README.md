@@ -1,6 +1,6 @@
 # YAPE - Yet Another PHP Enum
 
-A PHP code generator that aims to create enums that operate similarly to the way enums operate in Java.
+A PHP code generator that facilitates using type-safe, object-backed enums. 
 
 ## Requirements
 
@@ -15,12 +15,13 @@ composer require cspray/yape
 ### Features
 
 - Enums are type-safe objects which may, or may not, have 1 or more scalar values associated to it.
+- Enum values can be converted to string and the string representation may be converted back into an enum.
 - Enums implement an interface and are final.
 - Intended to mimic Java enums.
 
 ### Documentation
 
-_Docs to come_
+The library is documented at http://yape.cspray.io and within the source code itself.
 
 ### Motivation
 

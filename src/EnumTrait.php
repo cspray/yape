@@ -13,12 +13,18 @@ trait EnumTrait {
 
     static private $container;
 
+    private $enumValue;
+
+    private function __construct(string $enumValue) {
+        $this->enumValue = $enumValue;
+    }
+
     static public function values() : array {
         self::primeContainer();
         return array_values(self::$container);
     }
 
-    static public function valueOf(string $name) {
+    static public function valueOf(string $name) : self {
         self::primeContainer();
         if (!isset(self::$container[$name])) {
             $msg = sprintf('The value "%s" is not a valid %s name', $name, self::class);
@@ -31,13 +37,16 @@ trait EnumTrait {
         return $this === $compare;
     }
 
-    static protected function getSingleton(...$constructorArgs) : self {
-        $name = $constructorArgs[0];
-        if (!isset(self::$container[$name])) {
-            self::$container[$name] = new self(...$constructorArgs);
+    public function toString() : string {
+        return $this->enumValue;
+    }
+
+    static protected function getSingleton(string $enumValue, ...$constructorArgs) : self {
+        if (!isset(self::$container[$enumValue])) {
+            self::$container[$enumValue] = new self($enumValue, ...$constructorArgs);
         }
 
-        return self::$container[$name];
+        return self::$container[$enumValue];
     }
 
     static private function primeContainer() {

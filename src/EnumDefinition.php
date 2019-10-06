@@ -43,6 +43,8 @@ class EnumDefinition {
     }
 
     /**
+     * A list of strings that correspond to the values, and static constructor methods, for the given enum.
+     *
      * @return string[]
      */
     public function getEnumValues() : array {
