@@ -14,8 +14,7 @@ required by the enum.
 
 #### Added
 
-- Adds appropriate governenace documents for code of conduct, contributing to the project, and the discovery of security 
-vulnerabilities.
+- Adds appropriate governance documents for code of conduct, contributing to the project, and the discovery of security vulnerabilities.
 
 ## 2.0.0-rc3 - 2019-10-05
 
