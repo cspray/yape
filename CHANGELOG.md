@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog] and this project adheres to [Semantic Versioning]
 
+## 2.0.0 - 2019-10-05
+
+#### Changed
+
+- Moved the implementation of the default constructor and toString implementations to EnumTrait allowing generated 
+enums to have only the static constructor methods, a list of defined values, and whatver other custom functionality is 
+required by the enum.
+
+#### Added
+
+- Adds appropriate governance documents for code of conduct, contributing to the project, and the discovery of security vulnerabilities.
+
 ## 2.0.0-rc3 - 2019-10-05
 
 #### Changed
