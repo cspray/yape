@@ -4,6 +4,7 @@ namespace Cspray\Yape;
 
 /**
  *
+ *
  * @package Cspray\Yape
  * @license See LICENSE in source root
  */
