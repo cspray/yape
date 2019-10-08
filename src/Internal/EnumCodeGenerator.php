@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape;
+namespace Cspray\Yape\Internal;
 
 /**
  *

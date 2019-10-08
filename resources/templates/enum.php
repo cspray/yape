@@ -3,13 +3,12 @@
  * @var $this \Cspray\Yape\EnumDefinition
  */
 ?>
-namespace <?= $this->getNamespace() ?>;
+namespace <?= $this->getEnumClass()->getNamespace() ?>;
 
 use Cspray\Yape\Enum;
 use Cspray\Yape\EnumTrait;
-use Cspray\Yape\Exception\InvalidArgumentException;
 
-final class <?= $this->getEnumName() ?> implements Enum {
+final class <?= $this->getEnumClass()->getClassName() ?> implements Enum {
 
     use EnumTrait;
 

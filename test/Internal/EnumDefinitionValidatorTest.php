@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape\Test;
+namespace Cspray\Yape\Test\Internal;
 
-use Cspray\Yape\EnumDefinition;
-use Cspray\Yape\EnumDefinitionValidator;
+use Cspray\Yape\Internal\ClassSignatureDefinition;
+use Cspray\Yape\Internal\EnumDefinition;
+use Cspray\Yape\Internal\EnumDefinitionValidator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,7 +25,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidateWithBadNamespace() {
-        $definition = new EnumDefinition('This is a bad namespace', 'EnumName', 'One');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('This is a bad namespace\\EnumName'), 'One');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -36,7 +37,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidateWithBadClassName() {
-        $definition = new EnumDefinition('Vendor\\GoodApp', 'Bad Class Name', 'One');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('Vendor\\GoodApp\\Bad Class Name'), 'One');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -48,7 +49,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithEmptyEnumValue() {
-        $definition = new EnumDefinition('Vendor\\GoodApp', 'GoodClassName');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('Vendor\\GoodApp\\GoodClassName'));
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -60,7 +61,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithBadEnumValueName() {
-        $definition = new EnumDefinition('Vendorr\\GoodApp', 'Some_Class_Name1', 'Bad Method Name');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('Vendorr\\GoodApp\\Some_Class_Name1'), 'Bad Method Name');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -72,7 +73,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithReservedWordInNamespace() {
-        $definition = new EnumDefinition('Parent\\Class', 'SomeClass', 'OhNo');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('Parent\\Class\\SomeClass'), 'OhNo');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -84,7 +85,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithReservedWordInClass() {
-        $definition = new EnumDefinition('ParentNamespace\\SubNamespace', 'Class', 'OhNo');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('ParentNamespace\\SubNamespace\\Class'), 'OhNo');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());
@@ -96,7 +97,7 @@ class EnumDefinitionValidatorTest extends TestCase {
     }
 
     public function testValidatorWithDuplicateMethodNames() {
-        $definition = new EnumDefinition('Foo\\Bar\\Baz', 'Enum', 'One', 'One', 'Two');
+        $definition = new EnumDefinition(new ClassSignatureDefinition('Foo\\Bar\\Baz\\Enum'), 'One', 'One', 'Two');
         $results = $this->subject->validate($definition);
 
         $this->assertFalse($results->isValid());

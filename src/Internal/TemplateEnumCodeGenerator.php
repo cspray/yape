@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape;
+namespace Cspray\Yape\Internal;
 
 /**
  * Generates PHP code that represents an enum for a given EnumDefinition.
@@ -12,7 +12,7 @@ namespace Cspray\Yape;
  *                     and coverage is not counted. However, the very nature of testing out the enum proves that this
  *                     class functions correctly.
  */
-final class TemplateEnumCodeGenerator implements EnumCodeGenerator {
+final class TemplateEnumCodeGenerator extends AbstractTemplateGenerator implements EnumCodeGenerator {
 
     /**
      * Generate PHP code that can be saved to a file.
@@ -26,15 +26,7 @@ final class TemplateEnumCodeGenerator implements EnumCodeGenerator {
      * @return string
      */
     public function generate(EnumDefinition $enumDefinition) : string {
-        // this is its own anonymous function instead of doing this inline so that the template only has the
-        // variables as defined by the EnumDefinition.
-        $function = function() {
-            ob_start();
-            include dirname(__DIR__) . '/resources/templates/enum.php';
-            return ob_get_clean();
-        };
-
-        return '<?php declare(strict_types=1);' . PHP_EOL . PHP_EOL . $function->call($enumDefinition);
+        return $this->render(dirname(__DIR__, 2) . '/resources/templates/enum.php', $enumDefinition);
     }
 
 }

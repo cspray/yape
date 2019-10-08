@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape;
+namespace Cspray\Yape\Internal;
 
 use Cspray\Yape\Exception\EnumValidationException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,13 +36,9 @@ final class EnumDefinitionFactory {
 
     private function createEnumDefinition(InputInterface $input) : EnumDefinition {
         $fqcn = $input->getArgument('enumClass');
-        $segments = explode('\\', $fqcn);
-        $class = array_pop($segments);
-        $namespace = implode('\\', $segments);
-
         $enumValues = $input->getArgument('enumValues');
 
-        return new EnumDefinition($namespace, $class, ...$enumValues);
+        return new EnumDefinition(new ClassSignatureDefinition($fqcn), ...$enumValues);
     }
 
 }

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape\Test;
+namespace Cspray\Yape\Test\Internal;
 
 use Cspray\Yape\Console\InputDefinition\CreateEnumCommandDefinition;
-use Cspray\Yape\EnumDefinitionFactory;
+use Cspray\Yape\Internal\EnumDefinitionFactory;
 use Cspray\Yape\Exception\EnumValidationException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -31,8 +31,8 @@ class EnumDefinitionFactoryTest extends TestCase {
             $this->assertNotNull($exception);
 
             $enumDef = $exception->getEnumDefinition();
-            $this->assertSame('Foo\\Bar\\Bad Namesapace', $enumDef->getNamespace());
-            $this->assertSame('bad Class Name', $enumDef->getEnumName());
+            $this->assertSame('Foo\\Bar\\Bad Namesapace', $enumDef->getEnumClass()->getNamespace());
+            $this->assertSame('bad Class Name', $enumDef->getEnumClass()->getClassName());
             $this->assertSame(['Bad Method Name'], $enumDef->getEnumValues());
 
             $results = $exception->getValidationResults();
@@ -56,8 +56,8 @@ class EnumDefinitionFactoryTest extends TestCase {
         $factory = new EnumDefinitionFactory();
         $enumDefinition = $factory->fromConsole($input);
 
-        $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getNamespace());
-        $this->assertSame('EnumClass', $enumDefinition->getEnumName());
+        $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getEnumClass()->getNamespace());
+        $this->assertSame('EnumClass', $enumDefinition->getEnumClass()->getClassName());
         $this->assertSame(['One', 'Two', 'Three'], $enumDefinition->getEnumValues());
     }
 

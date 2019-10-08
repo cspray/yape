@@ -2,12 +2,12 @@
 
 namespace Cspray\Yape\Test\Console;
 
-use Cspray\Yape\Console\Configuration\CreateEnumCommandConfig;
+use Cspray\Yape\Internal\ApplicationConfiguration;
 use Cspray\Yape\Console\CreateEnumCommand;
-use Cspray\Yape\Console\StatusCodes;
-use Cspray\Yape\EnumCodeGenerator;
-use Cspray\Yape\EnumDefinition;
-use Cspray\Yape\EnumDefinitionFactory;
+use Cspray\Yape\Console\StatusCode;
+use Cspray\Yape\Internal\EnumCodeGenerator;
+use Cspray\Yape\Internal\EnumDefinition;
+use Cspray\Yape\Internal\EnumDefinitionFactory;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamFile;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +38,7 @@ class CreateEnumCommandTest extends TestCase {
     }
 
     private function getCreateEnumCommand() : CreateEnumCommand {
-        return new CreateEnumCommand($this->codeGenerator, new EnumDefinitionFactory(), new CreateEnumCommandConfig($this->rootDir, $this->outputDir));
+        return new CreateEnumCommand($this->codeGenerator, new EnumDefinitionFactory(), new ApplicationConfiguration($this->rootDir, $this->outputDir, 'src/Doctrine'));
     }
 
     public function testDescription() {
@@ -102,12 +102,12 @@ class CreateEnumCommandTest extends TestCase {
         ]);
 
         $expected = <<<CONSOLE
-There was an error validating the enum provided. Please fix the following errors and try again:
+There was an error validating the input provided. Please fix the following errors and try again:
 
  [ERROR] - The enum namespace must have only valid PHP namespace characters
 CONSOLE;
 
-        $this->assertSame(StatusCodes::ENUM_INVALID_ERROR, $tester->getStatusCode());
+        $this->assertSame(StatusCode::InputInvalid()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 
@@ -125,7 +125,7 @@ CONSOLE;
         $expected = <<<CONSOLE
 [ERROR] You must not use the output-dir and dry-run options together.
 CONSOLE;
-        $this->assertSame(StatusCodes::INPUT_OPTIONS_CONFLICT_ERROR, $tester->getStatusCode());
+        $this->assertSame(StatusCode::InputOptionsConflict()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 
@@ -149,7 +149,7 @@ There was an error creating your enum:
          {$path}
 CONSOLE;
 
-        $this->assertSame(StatusCodes::ENUM_EXISTS_ERROR, $tester->getStatusCode());
+        $this->assertSame(StatusCode::EnumExists()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
         $this->assertSame('existed', file_get_contents($path));
     }
@@ -172,7 +172,7 @@ There was an error creating your enum:
  [ERROR] The output directory specified, "$outputDir", does not exist.
 CONSOLE;
 
-        $this->assertSame(StatusCodes::SYSTEM_OUTPUT_DIRECTORY_ERROR, $tester->getStatusCode());
+        $this->assertSame(StatusCode::SystemOutputDirectoryInvalid()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 
@@ -180,8 +180,8 @@ CONSOLE;
         $this->codeGenerator->expects($this->once())
             ->method('generate')
             ->with($this->callback(function(EnumDefinition $enumDefinition) {
-                $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getNamespace());
-                $this->assertSame('Compass', $enumDefinition->getEnumName());
+                $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getEnumClass()->getNamespace());
+                $this->assertSame('Compass', $enumDefinition->getEnumClass()->getClassName());
                 $this->assertSame(['North', 'South', 'East', 'West'], $enumDefinition->getEnumValues());
                 return true;
             }))
@@ -200,7 +200,7 @@ Your generated enum code:
 GENERATED CODE
 CONSOLE;
 
-        $this->assertSame(StatusCodes::OK, $tester->getStatusCode());
+        $this->assertSame(StatusCode::Ok()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame($expected, trim($tester->getDisplay()));
     }
 
@@ -208,8 +208,8 @@ CONSOLE;
         $this->codeGenerator->expects($this->once())
             ->method('generate')
             ->with($this->callback(function(EnumDefinition $enumDefinition) {
-                $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getNamespace());
-                $this->assertSame('Compass', $enumDefinition->getEnumName());
+                $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getEnumClass()->getNamespace());
+                $this->assertSame('Compass', $enumDefinition->getEnumClass()->getClassName());
                 $this->assertSame(['North', 'South', 'East', 'West'], $enumDefinition->getEnumValues());
                 return true;
             }))
@@ -227,7 +227,7 @@ CONSOLE;
         $enumFile = $this->vfs->getChild('code-generator/enums/' . $this->outputDir . '/Compass.php');
         $this->assertNotNull($enumFile);
         $this->assertSame($expected, $enumFile->getContent());
-        $this->assertSame(StatusCodes::OK, $tester->getStatusCode());
+        $this->assertSame(StatusCode::Ok()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame('Your enum was stored at ' . vfsStream::url('code-generator/enums/' . $this->outputDir . '/Compass.php'), trim($tester->getDisplay()));
     }
 
@@ -235,8 +235,8 @@ CONSOLE;
         $this->codeGenerator->expects($this->once())
             ->method('generate')
             ->with($this->callback(function(EnumDefinition $enumDefinition) {
-                $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getNamespace());
-                $this->assertSame('Compass', $enumDefinition->getEnumName());
+                $this->assertSame('Foo\\Bar\\Baz', $enumDefinition->getEnumClass()->getNamespace());
+                $this->assertSame('Compass', $enumDefinition->getEnumClass()->getClassName());
                 $this->assertSame(['North', 'South', 'East', 'West'], $enumDefinition->getEnumValues());
                 return true;
             }))
@@ -260,7 +260,7 @@ CONSOLE;
         $enumFile = $this->vfs->getChild('code-generator/enums/lib/known-dir/Compass.php');
         $this->assertNotNull($enumFile);
         $this->assertSame($expected, $enumFile->getContent());
-        $this->assertSame(StatusCodes::OK, $tester->getStatusCode());
+        $this->assertSame(StatusCode::Ok()->getStatusCode(), $tester->getStatusCode());
         $this->assertSame('Your enum was stored at ' . vfsStream::url('code-generator/enums/lib/known-dir/Compass.php'), trim($tester->getDisplay()));
     }
 
