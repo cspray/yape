@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Cspray\Yape;
+namespace Cspray\Yape\Internal;
 
 /**
  *
@@ -12,8 +12,8 @@ final class ValidationResults {
     private $isValid;
     private $errorMessages;
 
-    public function __construct(bool $isValid, string ...$errorMessages) {
-        $this->isValid = $isValid;
+    public function __construct(string ...$errorMessages) {
+        $this->isValid = empty($errorMessages);
         $this->errorMessages = $errorMessages;
     }
 

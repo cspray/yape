@@ -3,9 +3,8 @@
 namespace Cspray\Yape\Test;
 
 use Cspray\Yape\Enum;
-use Cspray\Yape\TemplateEnumCodeGenerator;
-use Cspray\Yape\EnumDefinition;
-use Cspray\Yape\EnumDefinitionValidator;
+use Cspray\Yape\Internal\TemplateEnumCodeGenerator;
+use Cspray\Yape\Internal\EnumDefinition;
 use Cspray\Yape\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +18,7 @@ abstract class EnumTest extends TestCase {
     static public function setUpBeforeClass() : void {
         parent::setUpBeforeClass();
         $enumDefinition = static::getEnumDefinition();
-        $code = (new TemplateEnumCodeGenerator(new EnumDefinitionValidator()))->generate($enumDefinition);
+        $code = (new TemplateEnumCodeGenerator())->generate($enumDefinition);
 
         $code = preg_replace('/<\?php/', '', $code);
 
@@ -100,7 +99,7 @@ abstract class EnumTest extends TestCase {
      */
     public function testInvalidValueOf() {
         $enumDef = $this->getEnumDefinition();
-        $enumClass = $enumDef->getNamespace() . '\\' . $enumDef->getEnumName();
+        $enumClass = $enumDef->getEnumClass()->getFullyQualifiedClassName();
         $value = bin2hex(random_bytes(10));
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The value "' . $value . '" is not a valid ' . $enumClass . ' name');
@@ -127,7 +126,7 @@ abstract class EnumTest extends TestCase {
     }
 
     private function convertNameToCallable(EnumDefinition $enumDefinition, string $name) {
-        $callback = $enumDefinition->getNamespace() . '\\' . $enumDefinition->getEnumName() . '::' . $name;
+        $callback = $enumDefinition->getEnumClass()->getFullyQualifiedClassName() . '::' . $name;
         return $callback;
     }
 

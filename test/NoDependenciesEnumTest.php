@@ -2,7 +2,8 @@
 
 namespace Cspray\Yape\Test;
 
-use Cspray\Yape\EnumDefinition;
+use Cspray\Yape\Internal\ClassSignatureDefinition;
+use Cspray\Yape\Internal\EnumDefinition;
 use stdClass;
 
 /**
@@ -27,8 +28,7 @@ class NoDependenciesEnumTest extends EnumTest {
 
     static protected function getEnumDefinition() : EnumDefinition {
         return new EnumDefinition(
-            'YourVendor\\YourApp\\YourEnum',
-            'Compass',
+            new ClassSignatureDefinition('YourVendor\\YourApp\\YourEnum\\Compass'),
             'North',
             'South',
             'East',

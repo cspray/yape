@@ -17,7 +17,7 @@ composer require cspray/yape
 - Enums are type-safe objects which may, or may not, have 1 or more scalar values associated to it.
 - Enum values can be converted to string and the string representation may be converted back into an enum.
 - Enums implement an interface and are final.
-- Intended to mimic Java enums.
+- Intended to loosely mimic Java enums.
 
 ### Documentation
 

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
  * @package Cspray\Yape\Console\InputDefinition
  * @license See LICENSE in source root
  */
-class CreateEnumCommandDefinition extends InputDefinition {
+final class CreateEnumCommandDefinition extends InputDefinition {
 
     public function __construct() {
         parent::__construct([]);

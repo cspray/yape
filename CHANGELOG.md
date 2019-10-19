@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog] and this project adheres to [Semantic Versioning]
 
+## 2.1.0 - 2019-10-??
+
+This version represents some significant refactoring for how YAPE works internally. However, this did not alter the 
+public API available through the Symfony console in a breaking manner nor did it alter the enum code that was generated. 
+If you were reliant on the internal API, which is not supported and you should not rely on, there may be breaking changes 
+with this release.
+
+#### Added
+
+- Adds a `create-enum-dbal-type` that will generate a Doctrine Type that allows an Enum to be persisted to a database 
+using Doctrine. This includes all of the necessary validators, definitions, factories, and code generators to support 
+this functionality.
+- Adds a `ClassSignatureDefinition` that encapsulates the concept of a fully-qualified class name having a distinct 
+namespace and class.
+- Adds `EnumDefinition::getEnumClass` that returns a `ClassSignatureDefinition` representing the FQCN for the enum.
+- Adds an `AbstractValidator` that can facilitate validating common aspects of both enum and DBAL Type classes.
+- Adds a `AbstractEnumType` that extends from `Doctrine\DBAL\Types\Type` and holds the primary logic for converting 
+an enum into a database value and vice versa. Only the name of the Doctrine Type as well as the FQCN for the Enum 
+supported are required.
+
+#### Changed
+
+- Introduces an `Internal` namespace and moves all code that is not expected to be used by internal apps into this namespace.
+- Changes the `ValidationResults` constructor to no longer require an explicit boolean for whether or not the results are
+valid. This is now determined at construction time by whether or not there are error messages present.
+
+#### Removed
+
+- Removes the `EnumDefinition::getNamespace` and `EnumDefinition::getEnumName` in favor of the new `EnumDefinition::getEnumClass`.
+
 ## 2.0.0 - 2019-10-05
 
 #### Changed
