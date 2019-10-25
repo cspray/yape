@@ -11,7 +11,7 @@ abstract class AbstractTemplateGenerator {
 
     protected function render(string $template, $context) : string {
         // this is its own anonymous function instead of doing this inline so that the template only has the
-        // variables as defined by the EnumDefinition.
+        // variables as defined by the $context.
         $function = function() use($template) {
             ob_start();
             include $template;

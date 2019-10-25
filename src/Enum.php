@@ -27,7 +27,7 @@ interface Enum {
      * Return an enum value that matches the given $value or throw an exception if the value is not valid for the given
      * enum.
      *
-     * $value SHOULD be the name of the static method that generated the enum instance.
+     * $value SHOULD be the name of the static method constructor that generated the enum instance.
      *
      * @param string $value
      * @return self
@@ -45,7 +45,7 @@ interface Enum {
 
     /**
      * Return the enum value for the given enum instance; the return value of this method should result in a valid enum
-     * being created from valueOf.
+     * being created from valueOf and should correspond to static method constructor.
      *
      * @return string
      */
