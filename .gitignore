@@ -1,5 +1,6 @@
 .idea/
 build/
+docs/_site/
 tmp/
 vendor/
 .phpunit*

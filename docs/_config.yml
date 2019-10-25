@@ -1,0 +1,11 @@
+collections:
+  tutorials:
+    output: true
+    permalink: /:collection/:name
+  how-tos:
+    output: true
+    permalink: /:collection/:name
+    sort_by: sort_order # Ensures that the Tutorial index shows articles in correct order
+  references:
+    output: true
+    permalink: /:collection/:name
