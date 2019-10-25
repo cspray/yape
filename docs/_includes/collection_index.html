@@ -1,0 +1,13 @@
+<section class="section">
+  <h2 class="subtitle is-size-3">{{include.title}}</h2>
+
+  {% for page in include.collection %}
+  {{page.sort_order}}
+  <div class="box">
+    <h3 class="is-size-5"><a href="{{page.url}}">{{page.title}}</a></h3>
+    <p class="content">
+      {{page.description}}
+    </p>
+  </div>
+  {% endfor %}
+</section>

@@ -1,0 +1,117 @@
+---
+layout: article
+
+title: Adding New Enum Values
+description: As business needs change so must your code. It is expected that you will need to add or modify Enum Values over time, this guide goes over the quick 2-step process to ensure new values are added correctly.
+---
+<p class="content">
+  It is expected that enum values could change over time. Given enough enum usage over time you will almost undoubtedly
+  need to adjust the values post code generation. Fortunately this is an easy, straight-forward process but does require
+  some specific implementation which we'll go over.
+</p>
+
+<p class="content">
+  Expanding on the Compass enum <a href="/tutorials/create-enum">from the Creating an Enum Tutorial</a> we will adjust the
+  Compass to allow 8-sides; NorthWest, NorthEast, etc. First our original compass should look something like:
+</p>
+
+<pre class="content"><code class="language-php">&lt;?php
+
+namespace YourNamespace\Enums;
+
+use Cspray\Yape\Enum;
+use Cspray\Yape\EnumTrait;
+
+final class Compass implements Enum {
+
+    use EnumTrait;
+
+    public static function North() : self {
+        return self::getSingleton('North');
+    }
+
+    public static function South() : self {
+        return self::getSingleton('South');
+    }
+
+    public static function East() : self {
+        return self::getSingleton('East');
+    }
+
+    public static function West() : self {
+        return self::getSingleton('West');
+    }
+
+    protected static function getAllowedValues() : array {
+        return ['North', 'South', 'East', 'West'];
+    }
+
+}</code></pre>
+
+<p class="content">
+  For our example we'll implement the <code>NorthEast</code> value and leave the remaining three as an exercise left to
+  the reader.
+</p>
+
+<h4 class="is-size-5">Step #1 - Add the public static method constructor</h4>
+<p class="content">
+  Enums have a private constructor and can only be constructed through their public static methods. First let's add the
+  appropriate method to generate the <code>NorthEast</code> value.
+</p>
+
+<pre class="content"><code class="language-php">&lt;?php
+
+namespace YourNamespace\Enums;
+
+use Cspray\Yape\Enum;
+use Cspray\Yape\EnumTrait;
+
+final class Compass implements Enum {
+
+    // ... all of the previous methods
+
+    public static function NorthEast() : self {
+        return self::getSingleton('NorthEast');
+    }
+}</code></pre>
+
+<div class="message is-info">
+  <div class="message-body">
+    It is important that you call <code>self::getSingleton()</code> to ensure that the same object is returned each time
+    this method is called. This is an important aspect of how YAPE works and if you do not return an instance created through
+    this method your Enum is likely to not function correctly in all scenarios.
+  </div>
+</div>
+
+<h4 class="is-size-5">Step #2 - Adjust the list of allowed values</h4>
+<p class="content">
+  For many of the methods provided by the EnumTrait we need to know what the allowed values of your Enum could be. While it
+  may be possible to reflectively determine this there would not be a straight-forward way in which to do so. Instead, <strong>each
+  enum MUST provide the string values that it respects</strong>, these values should match the static methods that were generated
+  or were added in step 1 of this guide.
+</p>
+
+<pre class="content"><code class="language-php">&lt;?php
+
+namespace YourNamespace\Enums;
+
+use Cspray\Yape\Enum;
+use Cspray\Yape\EnumTrait;
+
+final class Compass implements Enum {
+
+    // ... all of the previous methods
+
+    public static function NorthEast() : self {
+        return self::getSingleton('NorthEast');
+    }
+
+    protected static function getAllowedValues() : array {
+        return ['North', 'South', 'East', 'West', 'NorthEast'];
+    }
+
+}</code></pre>
+
+<p class="content">
+  At this point you're finished adding the new value to your Enum!
+</p>

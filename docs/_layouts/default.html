@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YAPE - Yet Another PHP Enum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <link rel="stylesheet" href="/css/prism.css">
+  <script src="https://kit.fontawesome.com/e0b4a7b997.js" crossorigin="anonymous"></script>
+  <style>
+    .side-nav {
+      margin-top: 1em;
+    }
+    .menu-list a.is-active {
+      background-color: #363636;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const navBurger = document.querySelector('.navbar-burger');
+      navBurger.addEventListener("click", () => {
+        const navMenu = document.querySelector('.navbar-menu');
+        navBurger.classList.toggle('is-active');
+        navMenu.classList.toggle('is-active');
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <nav class="navbar is-dark">
+      <div class="navbar-brand">
+        <a href="/" class="navbar-item"><h1 class="title has-text-light">Yet Another PHP Enum</h1></a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu has-text-centered-mobile has-text-centered-tablet">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/tutorials">Tutorials</a>
+          <a class="navbar-item" href="/how-tos">How To</a>
+        </div>
+        <div class="navbar-end">
+          <a class="navbar-item" href="https://github.com/cspray/yape"><span class="icon"><i class="fab fa-github fa-2x"></i></span></a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          {{ content }}
+        </div>
+        <div class="column side-nav is-3">
+          <div class="menu">
+            <ul class="menu-list">
+              <li>{% include nav_link.html url="/" label="Installation" %}</li>
+            </ul>
+            <p class="menu-label">Tutorials</p>
+            <ul class="menu-list">
+              {% for tutorial in site.tutorials %}
+                <li>{% include nav_link.html url=tutorial.url label=tutorial.title %}</li>
+              {% endfor %}
+            </ul>
+            <p class="menu-label">How To</p>
+            <ul class="menu-list">
+              {% for how_to in site.how-tos %}
+                <li>{% include nav_link.html url=how_to.url label=how_to.title %}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/prism.js"></script>
+</body>
+</html>
