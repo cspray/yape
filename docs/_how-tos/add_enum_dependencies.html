@@ -107,8 +107,8 @@ final class Compass implements Enum {
 <h4 class="is-size-5" id="step-3">Step #3 - Set appropriate data in constructor</h4>
 <p class="content">
   After we've created the constructor next we need to make sure the appropriate data is set on the enum properties. For
-  the <code>$name</code> we should ensure to call `setName()` which is provided by <code>EnumTrait</code>. The <code>$abbreviation</code>
-  should be set to the property we added in <a href="#step-1">step #1</a>.
+  the <code>$name</code> we should ensure to call <code>setEnumValue()</code> which is provided by <code>EnumTrait</code>.
+  The <code>$abbreviation</code> should be set to the property we added in <a href="#step-1">step #1</a>.
 </p>
 
 <pre class="content"><code class="language-php">&lt;php
@@ -125,7 +125,7 @@ final class Compass implements Enum {
     private $abbreviation;
 
     private function __construct(string $name, string $abbreviation) {
-        $this->setName($name);
+        $this->setEnumValue($name);
         $this->abbreviation = $abbreviation;
     }
 
@@ -135,7 +135,7 @@ final class Compass implements Enum {
 
 <div class="message is-info">
   <div class="message-body">
-    It is critical that you call <code>setName</code> if you override the constructor provided by <code>EnumTrait</code>.
+    It is critical that you call <code>setEnumValue</code> if you override the constructor provided by <code>EnumTrait</code>.
     If this method is not called your Enum is likely to not function correctly in all scenarios. Specifically the <code>toString</code>
     method will fail and there will likely be other unintended consequences.
   </div>

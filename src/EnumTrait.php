@@ -16,6 +16,10 @@ trait EnumTrait {
     private $enumValue;
 
     private function __construct(string $enumValue) {
+        $this->setEnumValue($enumValue);
+    }
+
+    private function setEnumValue(string $enumValue) : void {
         $this->enumValue = $enumValue;
     }
 
