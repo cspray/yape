@@ -3,7 +3,6 @@
 namespace Cspray\Yape;
 
 use Cspray\Yape\Exception\InvalidArgumentException;
-use http\Exception\BadQueryStringException;
 
 /**
  * A reusable implementation of the methods and intent required by the Enum interface.
@@ -11,9 +10,9 @@ use http\Exception\BadQueryStringException;
  * @package Cspray\Yape
  * @license See LICENSE in source root
  */
-trait EnumTrait {
+trait EnumTrait /* implements Enum */ {
 
-    static private $container;
+    static private $container = [];
 
     private $enumValue;
 
@@ -105,7 +104,7 @@ trait EnumTrait {
      * valueOf() methods work appropriately.
      */
     static private function primeContainer() {
-        $allowedValues = self::getAllowedValues();
+        $allowedValues = static::getAllowedValues();
         if (count(self::$container) !== count($allowedValues)) {
             foreach ($allowedValues as $enumValue) {
                 self::$enumValue();

@@ -1,3 +1,4 @@
+baseurl: "/yape"
 collections:
   tutorials:
     output: true
