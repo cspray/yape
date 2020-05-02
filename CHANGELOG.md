@@ -7,6 +7,20 @@ include those that may be part of the user-facing API as well as the developer-f
 Enum interface or CLI commands impact the user of this library while changes to the components under the `Cspray\Yape\Internal` 
 namespace are intended for developers and maintainers working on YAPE itself.
 
+## 3.0.0 - 2020-??-??
+
+This update is largely modularizing the codebase so that you can have installed on your production deployments only the
+code that is necessary. After upgrading you will need to add `cspray/yape-cli` and/or `cspray/yape-dbal`. 
+
+#### Removed
+
+- Removed the requirement to have Symfony Console installed and moved all CLI tools to its own package: cspray/yape-cli.
+- Removed the AbstractEnumType and move it to its own package: cspray/yape-dbal.
+
+#### Changed
+
+- Updated documentation to reflect changes in project structure.
+
 ## 2.1.0 - 2019-10-25
 
 This version represents some significant refactoring for how YAPE works internally. However, this did not alter the 
