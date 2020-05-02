@@ -7,7 +7,7 @@ include those that may be part of the user-facing API as well as the developer-f
 Enum interface or CLI commands impact the user of this library while changes to the components under the `Cspray\Yape\Internal` 
 namespace are intended for developers and maintainers working on YAPE itself.
 
-## 3.0.0 - 2020-??-??
+## 3.0.0 - 2020-05-02
 
 This update is largely modularizing the codebase so that you can have installed on your production deployments only the
 code that is necessary. After upgrading you will need to add `cspray/yape-cli` and/or `cspray/yape-dbal`. 
