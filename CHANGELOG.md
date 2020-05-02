@@ -10,13 +10,16 @@ namespace are intended for developers and maintainers working on YAPE itself.
 ## 3.0.0 - 2020-??-??
 
 This update is largely modularizing the codebase so that you can have installed on your production deployments only the
-code that is necessary. After upgrading you will need to add `cspray/yape-cli` and/or `cspray/yape-dbal` to keep 
-expected behavior.
+code that is necessary. After upgrading you will need to add `cspray/yape-cli` and/or `cspray/yape-dbal`. 
 
 #### Removed
 
 - Removed the requirement to have Symfony Console installed and moved all CLI tools to its own package: cspray/yape-cli.
 - Removed the AbstractEnumType and move it to its own package: cspray/yape-dbal.
+
+#### Changed
+
+- Updated documentation to reflect changes in project structure.
 
 ## 2.1.0 - 2019-10-25
 

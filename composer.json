@@ -1,6 +1,6 @@
 {
   "name": "cspray/yape",
-  "description": "Type-safe enum implementation for PHP.",
+  "description": "Type-safe, object-backed enum implementation in userland PHP.",
   "keywords": ["enum"],
   "homepage": "https://cspray.io/yape",
   "license": "MIT",
