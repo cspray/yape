@@ -1,4 +1,4 @@
-# YAPE - Yet Another PHP Enum
+# Yet Another PHP Enum (yape)
 
 A type-safe, object-backed enum implemented in userland PHP. Combined with [cspray/yape-cli] aims to provide an easy 
 way to use enums in your PHP codebase.
